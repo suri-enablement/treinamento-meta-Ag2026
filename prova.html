@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Prova · Nova Precificação Meta · Suri Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0d21;--paper:#12163a;--wash:#0d1030;
+  --blue:#3d5af1;--lav:#b6aefc;--green:#1a9e6b;
+  --red:#e05252;--amber:#d97706;
+  --ink:#eef0fb;--soft:#a8adcf;--faint:#7b81a8;
+  --line:rgba(255,255,255,0.08);
+}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+button{font-family:'Sora',sans-serif}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(135deg,#131a3d,#1c2560,#3d2f8a);padding:16px 28px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+.topbar-logo{font-size:14px;font-weight:800;color:#fff;letter-spacing:0.3px}
+.topbar-sub{font-size:11px;color:#b8bedd;font-weight:500}
+
+/* SCREEN SYSTEM */
+.screen{display:none;min-height:calc(100vh - 60px)}
+.screen.active{display:block}
+
+/* ── TELA 1 — INSCRIÇÃO ── */
+#screen-register{display:flex;align-items:center;justify-content:center;padding:48px 24px}
+.register-card{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:44px 40px;max-width:480px;width:100%;text-align:center}
+.register-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(61,90,241,0.15);border:1px solid rgba(61,90,241,0.3);border-radius:100px;padding:6px 14px;font-size:10.5px;font-weight:700;color:var(--lav);letter-spacing:0.5px;margin-bottom:20px}
+.register-card h1{font-size:24px;font-weight:800;margin-bottom:8px}
+.register-card p{font-size:13px;color:var(--soft);line-height:1.6;margin-bottom:28px}
+.field label{display:block;font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:7px;text-align:left}
+.field input{width:100%;background:var(--wash);border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;font-family:'Sora',sans-serif;font-size:14px;color:var(--ink);margin-bottom:16px}
+.field input:focus{outline:none;border-color:var(--blue)}
+.field input::placeholder{color:var(--faint)}
+.btn-primary{width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:16px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-primary:hover{background:#2f47d4}
+.btn-primary:disabled{background:var(--faint);cursor:not-allowed}
+.error-msg{font-size:12px;color:var(--red);margin-top:-8px;margin-bottom:12px;text-align:left;display:none}
+.rules-box{background:rgba(255,255,255,0.04);border-radius:12px;padding:14px 16px;margin-bottom:24px;text-align:left}
+.rules-box p{font-size:11.5px;color:var(--soft);line-height:1.6}
+.rules-box b{color:var(--ink)}
+
+/* ── TELA 2 — INTRO ── */
+#screen-intro{display:flex;align-items:center;justify-content:center;padding:48px 24px}
+.intro-card{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:44px 40px;max-width:560px;width:100%}
+.intro-card h2{font-size:22px;font-weight:800;margin-bottom:12px}
+.intro-card p{font-size:13px;color:var(--soft);line-height:1.65;margin-bottom:10px}
+.intro-rules{list-style:none;margin:20px 0 28px}
+.intro-rules li{display:flex;gap:10px;font-size:12.5px;color:var(--soft);padding:8px 0;border-top:1px solid var(--line);line-height:1.5}
+.intro-rules li:first-child{border-top:none}
+.intro-rules li::before{content:"⚠";flex-shrink:0}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.meta-box{background:var(--wash);border-radius:12px;padding:14px 16px}
+.meta-box-label{font-size:10px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.meta-box-value{font-size:16px;font-weight:800;color:var(--ink)}
+
+/* ── TELA 3 — PROVA ── */
+#screen-quiz{padding:32px 24px 80px;max-width:760px;margin:0 auto}
+.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
+.quiz-progress-wrap{flex:1}
+.quiz-progress-label{font-size:11px;font-weight:700;color:var(--faint);margin-bottom:6px}
+.quiz-progress-bar{height:6px;background:var(--line);border-radius:10px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:var(--blue);border-radius:10px;transition:width .4s ease}
+.quiz-timer{font-size:13px;font-weight:700;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:100px;padding:8px 16px;white-space:nowrap}
+.question-card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:30px 32px;margin-bottom:20px}
+.q-num{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:0.6px;text-transform:uppercase;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:700;line-height:1.55;margin-bottom:22px}
+.option{display:block;width:100%;text-align:left;background:var(--wash);border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;font-family:'Sora',sans-serif;font-size:13px;color:var(--soft);cursor:pointer;margin-bottom:8px;transition:border-color .15s,background .15s;display:flex;align-items:flex-start;gap:12px}
+.option:hover:not(:disabled){border-color:var(--blue);color:var(--ink);background:rgba(61,90,241,0.06)}
+.option:disabled{cursor:default}
+.option-letter{font-weight:800;font-size:12px;color:var(--faint);flex-shrink:0;margin-top:1px;width:16px}
+.option.correct{border-color:var(--green);background:rgba(26,158,107,0.1)}
+.option.correct .option-letter{color:var(--green)}
+.option.wrong{border-color:var(--red);background:rgba(224,82,82,0.1)}
+.option.wrong .option-letter{color:var(--red)}
+.feedback{margin-top:14px;padding:14px 16px;border-radius:12px;font-size:12.5px;line-height:1.6;display:none}
+.feedback.show{display:block}
+.feedback.correct-fb{background:rgba(26,158,107,0.1);border:1px solid rgba(26,158,107,0.3);color:#7be3b0}
+.feedback.wrong-fb{background:rgba(224,82,82,0.08);border:1px solid rgba(224,82,82,0.25);color:#f0a0a0}
+.feedback b{color:var(--ink)}
+
+/* ── TELA 4 — RESULTADO ── */
+#screen-result{display:flex;align-items:center;justify-content:center;padding:48px 24px}
+.result-card{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:44px 40px;max-width:560px;width:100%;text-align:center}
+.result-score{font-size:56px;font-weight:800;line-height:1;margin-bottom:6px}
+.result-score.high{color:var(--green)}
+.result-score.mid{color:var(--amber)}
+.result-score.low{color:var(--red)}
+.result-label{font-size:13px;color:var(--soft);margin-bottom:24px}
+.result-breakdown{background:var(--wash);border-radius:14px;padding:18px 20px;text-align:left;margin-bottom:24px}
+.rb-row{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--line);font-size:13px}
+.rb-row:first-child{border-top:none}
+.rb-label{color:var(--soft)}
+.rb-value{font-weight:700;color:var(--ink)}
+.result-msg{font-size:13px;color:var(--soft);line-height:1.65;margin-bottom:24px;padding:16px;background:rgba(61,90,241,0.08);border-radius:12px;border:1px solid rgba(61,90,241,0.15)}
+.sending-msg{font-size:12px;color:var(--faint);margin-top:12px}
+
+/* TELA 5 — JÁ FEZ */
+#screen-done{display:flex;align-items:center;justify-content:center;padding:48px 24px}
+
+@media(max-width:560px){
+  .register-card,.intro-card,.result-card{padding:28px 20px}
+  .meta-grid{grid-template-columns:1fr}
+  #screen-quiz{padding:24px 16px 60px}
+  .question-card{padding:22px 20px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-logo">Suri Shop · Treinamento</div>
+    <div class="topbar-sub">Nova Precificação Meta — Prova v1</div>
+  </div>
+</div>
+
+<!-- ── TELA 1: INSCRIÇÃO ── -->
+<div id="screen-register" class="screen active">
+  <div class="register-card">
+    <div class="register-badge">🎓 PROVA OFICIAL</div>
+    <h1>Antes de começar</h1>
+    <p>Informe seu nome e e-mail corporativo. A prova só pode ser feita uma vez por e-mail.</p>
+
+    <div class="rules-box">
+      <p><b>Regras:</b><br/>
+      • Somente e-mails <b>@chatbotmaker.io</b> ou <b>@suri.ai</b><br/>
+      • Uma resposta por questão — sem voltar atrás<br/>
+      • A prova não pode ser refeita<br/>
+      • 15 questões · Sem limite de tempo</p>
+    </div>
+
+    <div class="field">
+      <label>Nome completo</label>
+      <input type="text" id="inp-name" placeholder="Seu nome" autocomplete="name"/>
+      <div class="error-msg" id="err-name">Nome obrigatório.</div>
+    </div>
+    <div class="field">
+      <label>E-mail corporativo</label>
+      <input type="email" id="inp-email" placeholder="voce@suri.ai" autocomplete="email"/>
+      <div class="error-msg" id="err-email">E-mail inválido ou domínio não permitido.</div>
+    </div>
+
+    <button class="btn-primary" id="btn-register" onclick="handleRegister()">Continuar →</button>
+    <p id="reg-status" style="font-size:12px;color:var(--faint);margin-top:12px;display:none"></p>
+  </div>
+</div>
+
+<!-- ── TELA 2: INTRO ── -->
+<div id="screen-intro" class="screen">
+  <div class="intro-card">
+    <h2>Tudo pronto, <span id="intro-name"></span>!</h2>
+    <p>Esta prova avalia seu entendimento sobre a nova precificação da Meta e os 5 Movimentos do novo plano Suri Shop.</p>
+
+    <div class="meta-grid">
+      <div class="meta-box">
+        <div class="meta-box-label">Questões</div>
+        <div class="meta-box-value">15</div>
+      </div>
+      <div class="meta-box">
+        <div class="meta-box-label">Formato</div>
+        <div class="meta-box-value">4 opções (A–D)</div>
+      </div>
+      <div class="meta-box">
+        <div class="meta-box-label">Aprovação</div>
+        <div class="meta-box-value">≥ 70%</div>
+      </div>
+      <div class="meta-box">
+        <div class="meta-box-label">Respostas</div>
+        <div class="meta-box-value">Irreversíveis</div>
+      </div>
+    </div>
+
+    <ul class="intro-rules">
+      <li>Uma vez respondida, a questão não pode ser alterada.</li>
+      <li>Ao marcar, a resposta correta e a explicação aparecem imediatamente.</li>
+      <li>Ao finalizar, sua nota é enviada para o time de Enablement.</li>
+    </ul>
+
+    <button class="btn-primary" onclick="startQuiz()">Iniciar prova →</button>
+  </div>
+</div>
+
+<!-- ── TELA 3: PROVA ── -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-label" id="q-label">Questão 1 de 15</div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="q-fill" style="width:0%"></div></div>
+    </div>
+    <div class="quiz-timer" id="q-timer">00:00</div>
+  </div>
+  <div id="questions-container"></div>
+</div>
+
+<!-- ── TELA 4: RESULTADO ── -->
+<div id="screen-result" class="screen">
+  <div class="result-card">
+    <div class="result-score" id="res-score"></div>
+    <div class="result-label" id="res-label"></div>
+    <div class="result-breakdown">
+      <div class="rb-row"><span class="rb-label">Respondido por</span><span class="rb-value" id="res-name"></span></div>
+      <div class="rb-row"><span class="rb-label">Acertos</span><span class="rb-value" id="res-acertos"></span></div>
+      <div class="rb-row"><span class="rb-label">Tempo total</span><span class="rb-value" id="res-tempo"></span></div>
+    </div>
+    <div class="result-msg" id="res-msg"></div>
+    <p class="sending-msg" id="res-sending">Enviando resultado...</p>
+  </div>
+</div>
+
+<!-- ── TELA 5: JÁ FEZ ── -->
+<div id="screen-done" class="screen">
+  <div class="register-card">
+    <div style="font-size:40px;margin-bottom:16px">🔒</div>
+    <h1>Prova já realizada</h1>
+    <p style="margin-top:12px">Você já completou esta prova. Cada e-mail pode responder apenas uma vez.<br/><br/>Em caso de dúvida, fale com o time de Enablement.</p>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// APPS SCRIPT ENDPOINT — substitua pela URL gerada ao publicar o script
+// ─────────────────────────────────────────────────────────────────────────────
+const APPS_SCRIPT_URL = 'COLE_A_URL_DO_APPS_SCRIPT_AQUI';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BANCO DE QUESTÕES (15 questões)
+// ─────────────────────────────────────────────────────────────────────────────
+const QUESTIONS = [
+  {
+    q: 'A partir de qual data as mensagens de Serviço do WhatsApp passam a ser cobradas?',
+    opts: ['1º de setembro de 2026','1º de outubro de 2026','1º de janeiro de 2027','A cobrança já vigorava antes de 2026'],
+    answer: 1,
+    feedback: '<b>Correto:</b> A cobrança das mensagens de Serviço passa a valer em <b>1º de outubro de 2026</b>. A Meta divulga o preço oficial até 1º de setembro de 2026 — essa é a data da publicação do preço, não do início da cobrança.'
+  },
+  {
+    q: 'Qual é o valor sinalizado para as mensagens de Serviço a partir de outubro de 2026?',
+    opts: ['R$ 0,36 por mensagem','R$ 0,66 por mensagem','R$ 0,04 por mensagem','R$ 1,60 por mensagem'],
+    answer: 2,
+    feedback: '<b>Correto:</b> O valor sinalizado é <b>R$ 0,04 por mensagem</b> — o mesmo praticado hoje para a categoria Utilidade/Serviço. Este é o valor de referência do Webinar F5 e <b>sujeito a confirmação oficial pela Meta em 1º de setembro de 2026</b>. R$ 1,60 é o custo de uma conversa completa (40 mensagens × R$ 0,04), não o custo unitário.'
+  },
+  {
+    q: 'Uma conversa humana típica de atendimento envolve cerca de 40 mensagens enviadas pela empresa. Com a nova cobrança, qual é o custo estimado dessa conversa?',
+    opts: ['R$ 0,04','R$ 0,40','R$ 1,60','R$ 4,00'],
+    answer: 2,
+    feedback: '<b>Correto:</b> 40 mensagens × R$ 0,04 = <b>R$ 1,60 por conversa</b>. Esse é o custo que hoje é zero e passa a existir a partir de outubro/26.'
+  },
+  {
+    q: 'Um cliente com plano de 5.000 interações faz em média 40 mensagens de serviço por atendimento. Qual o custo mensal adicional estimado em mensageria de serviço?',
+    opts: ['R$ 2.000','R$ 8.000','R$ 4.350','R$ 11.300'],
+    answer: 1,
+    feedback: '<b>Correto:</b> 5.000 × 40 = 200.000 mensagens de serviço × R$ 0,04 = <b>R$ 8.000/mês</b>. R$ 11.300 é o total da conta nova (plano R$ 3.300 + R$ 8.000).'
+  },
+  {
+    q: 'Qual das alternativas descreve corretamente o que muda na nova precificação da Meta?',
+    opts: [
+      'Todas as mensagens passam a ser cobradas, inclusive as do Webchat',
+      'Apenas as mensagens de Marketing ficam mais caras',
+      'As mensagens de Serviço (resposta dentro da janela de 24h) passam a ser cobradas — antes eram gratuitas',
+      'A Meta aumenta o preço das mensagens de Utilidade de R$ 0,04 para R$ 0,36'
+    ],
+    answer: 2,
+    feedback: '<b>Correto:</b> A mudança específica é que as <b>mensagens de Serviço</b> — as que a empresa envia respondendo um cliente dentro da janela de 24h — passam a ser cobradas. Além disso, <b>Templates de Utilidade enviados dentro da janela de 24h</b> também passam a ser cobrados a partir de 1/10/2026. As mensagens Ativas (Marketing, Utilidade, Autenticação) fora da janela já eram cobradas antes.'
+  },
+  {
+    q: 'Além das mensagens de Serviço, o que MAIS passa a ser cobrado a partir de 1º de outubro de 2026?',
+    opts: [
+      'Mensagens de Marketing enviadas fora da janela de 24h',
+      'Mensagens trocadas pelo Webchat da Suri Shop',
+      'Templates de Utilidade enviados dentro da janela de atendimento de 24 horas',
+      'Conversas iniciadas por anúncios Click to WhatsApp'
+    ],
+    answer: 2,
+    feedback: '<b>Correto:</b> Os <b>Templates de Utilidade enviados dentro da janela de 24h</b>, que antes eram gratuitos nesse contexto, também passam a ser cobrados a partir de 1/10/2026 — conforme o material oficial do Live 1 da Suri Shop. Marketing já era cobrado antes, Webchat não tem custo Meta, e a janela de 72h (Click to WhatsApp) continua gratuita.'
+  },
+  {
+    q: 'No novo plano Suri Shop, o que o cliente escolhe para dimensionar seu plano?',
+    opts: [
+      'Um pacote de mensagens de Marketing, Utilidade e Serviço',
+      'O número de clientes atendidos por mês',
+      'O número de atendentes e automações',
+      'O volume de disparos mensais por canal'
+    ],
+    answer: 1,
+    feedback: '<b>Correto:</b> O novo plano é dimensionado por <b>clientes atendidos por mês</b> — uma única variável. As mensagens da Meta saem do plano e passam a ser cobradas pelo consumo real, separadamente.'
+  },
+  {
+    q: 'Qual é o preço de uma mensagem de Marketing no novo modelo Suri Shop?',
+    opts: ['R$ 0,04','R$ 0,36','R$ 0,49','R$ 0,66'],
+    answer: 1,
+    feedback: '<b>Correto:</b> <b>R$ 0,36</b> — preço de tabela da Meta repassado sem margem pela Suri. O preço da Meta API para Marketing varia de R$ 0,31 a R$ 0,35; o repasse Suri de R$ 0,36 é transparente e os clientes podem conferir a tarifa na fonte. Antes, o custo equivalente embutido no plano antigo Suri chegava a R$ 0,49–0,66.'
+  },
+  {
+    q: 'O que é o "teto de gasto" no novo plano Suri Shop?',
+    opts: [
+      'O limite máximo de clientes atendidos no mês',
+      'Um desconto progressivo por volume de atendidos',
+      'Um valor máximo mensal que o cliente define para investimento em mensagens Meta — ao atingi-lo, os envios pausam automaticamente',
+      'O valor máximo do plano contratado, sem mensageria'
+    ],
+    answer: 2,
+    feedback: '<b>Correto:</b> O teto de gasto é um <b>limite configurável de investimento em mensagens Meta</b>. Ao atingir 100%, os envios pausam até o próximo mês — ou até o cliente ajustar o limite. É um diferencial exclusivo: nenhum concorrente tem controle de gasto dentro do produto.'
+  },
+  {
+    q: 'O Commerce Agent converte mais que a venda assistida com quantas mensagens em comparação?',
+    opts: ['O dobro','A mesma quantidade','3x menos mensagens','5x menos mensagens'],
+    answer: 2,
+    feedback: '<b>Correto:</b> O Commerce Agent faz a mesma venda com <b>3× menos mensagens</b> (13 vs. 40), reduzindo o custo de mensageria por conversa de R$ 1,60 para R$ 0,53 — uma redução de 67%.'
+  },
+  {
+    q: 'Um closer está negociando com um cliente que diz "vou perder o controle da minha conta". Qual é a melhor resposta?',
+    opts: [
+      '"Entendo sua preocupação — vamos acompanhar juntos a cada mês"',
+      '"Nenhum concorrente tem teto de gasto dentro do produto. Na Suri, você define o limite, acompanha em tempo real e os envios pausam sozinhos ao atingi-lo"',
+      '"A mudança vale para todos — você vai ter esse problema em qualquer plataforma"',
+      '"Podemos negociar um plano com mensageria embutida para dar mais previsibilidade"'
+    ],
+    answer: 1,
+    feedback: '<b>Correto:</b> O diferencial é exatamente o <b>teto de gasto dentro do produto</b> — que nenhum concorrente oferece. A demonstração resolve a objeção imediatamente. A opção A é vaga; a C é verdadeira mas não resolve o problema; a D contradiz o novo modelo.'
+  },
+  {
+    q: 'Um cliente faz 6.000 disparos de Marketing por mês com 25% de taxa de resposta. Quantos atendidos a mais o Gerador de Propostas adiciona à volumetria?',
+    opts: ['600','1.500','2.160','6.000'],
+    answer: 1,
+    feedback: '<b>Correto:</b> 6.000 × 25% = <b>1.500 atendidos a mais</b>. R$ 2.160 é o custo das mensagens de Marketing (6.000 × R$ 0,36), não o número de atendidos.'
+  },
+  {
+    q: 'Qual é a lógica central do Gerador de Propostas que aumenta o MRR na negociação?',
+    opts: [
+      'Reduzir o preço do plano para fechar mais rápido',
+      'Incluir mais canais no plano para aumentar o ticket',
+      'Cada resposta a um disparo é um cliente atendido — e entra na volumetria do plano, gerando MRR real em vez de excedente perdido',
+      'Ofertar desconto progressivo por volume de mensagens'
+    ],
+    answer: 2,
+    feedback: '<b>Correto:</b> A pergunta certa na negociação não é "quantos disparos?" — é "quantos vão responder?". <b>Cada resposta = cliente atendido = volumetria = MRR</b>. O webinar mostra que esse raciocínio gerou +29% de MRR no mesmo deal.'
+  },
+  {
+    q: 'Por que o argumento "as empresas vão para plataformas não oficiais" não se sustenta?',
+    opts: [
+      'Porque plataformas não oficiais são mais caras',
+      'Porque a Meta está bloqueando os números que operam fora da API oficial',
+      'Porque o Suri Shop oferece preços mais competitivos',
+      'Porque o WhatsApp só funciona com API oficial'
+    ],
+    answer: 1,
+    feedback: '<b>Correto:</b> A Meta está bloqueando ativamente os números que operam fora da API oficial. Na prática, empresas bloqueadas estão <b>migrando para a solução oficial</b> — não o contrário. É o argumento direto para essa objeção.'
+  },
+  {
+    q: 'Qual afirmação resume corretamente o posicionamento do Suri Shop frente à nova precificação da Meta?',
+    opts: [
+      'A Meta criou um custo por mensagem, e o Suri Shop protege o cliente não repassando esse custo',
+      'A Meta criou um custo por mensagem, e o Suri Shop entrega a plataforma que mais reduz mensagem no mercado — com teto de gasto, IA inclusa e mensagem ao preço da Meta',
+      'A Meta criou um custo por mensagem, e o Suri Shop migrou os clientes para o Webchat, que é gratuito',
+      'A Meta criou um custo por mensagem, e o Suri Shop absorve a margem para manter o preço atual'
+    ],
+    answer: 1,
+    feedback: '<b>Correto:</b> A frase exata do webinar: <b>"A Meta criou um custo por mensagem. Nós entregamos a plataforma que mais reduz mensagem no mercado — com teto de gasto, consumo em tempo real, mensagem ao preço da Meta e um plano simples de entender."</b> O Suri não esconde o custo — entrega eficiência para reduzi-lo.'
+  }
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ESTADO
+// ─────────────────────────────────────────────────────────────────────────────
+let userName = '', userEmail = '';
+let answers = new Array(QUESTIONS.length).fill(null);
+let answered = new Array(QUESTIONS.length).fill(false);
+let startTime = null;
+let timerInterval = null;
+
+const ALLOWED_DOMAINS = ['chatbotmaker.io', 'suri.ai'];
+const STORAGE_KEY = 'suri_prova_meta_v1';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function isValidEmail(email) {
+  const domain = email.split('@')[1];
+  return ALLOWED_DOMAINS.includes(domain) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60).toString().padStart(2,'0');
+  const s = (seconds % 60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INSCRIÇÃO
+// ─────────────────────────────────────────────────────────────────────────────
+async function handleRegister() {
+  const nameEl = document.getElementById('inp-name');
+  const emailEl = document.getElementById('inp-email');
+  const errName = document.getElementById('err-name');
+  const errEmail = document.getElementById('err-email');
+  const status = document.getElementById('reg-status');
+  const btn = document.getElementById('btn-register');
+
+  errName.style.display = 'none';
+  errEmail.style.display = 'none';
+
+  const name = nameEl.value.trim();
+  const email = emailEl.value.trim().toLowerCase();
+  let ok = true;
+
+  if (!name) { errName.style.display = 'block'; ok = false; }
+  if (!isValidEmail(email)) { errEmail.style.display = 'block'; ok = false; }
+  if (!ok) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+  status.style.display = 'block';
+  status.textContent = 'Verificando se o e-mail já foi cadastrado...';
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + '?action=check&email=' + encodeURIComponent(email));
+    const data = await res.json();
+    if (data.done) {
+      showScreen('screen-done');
+      return;
+    }
+  } catch(e) {
+    // Se o endpoint falhar, permite continuar (fallback offline)
+    console.warn('Check falhou, continuando:', e);
+  }
+
+  userName = name;
+  userEmail = email;
+  document.getElementById('intro-name').textContent = name.split(' ')[0];
+  btn.disabled = false;
+  btn.textContent = 'Continuar →';
+  status.style.display = 'none';
+  showScreen('screen-intro');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INICIAR PROVA
+// ─────────────────────────────────────────────────────────────────────────────
+function startQuiz() {
+  startTime = Date.now();
+  let elapsed = 0;
+  timerInterval = setInterval(() => {
+    elapsed = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById('q-timer').textContent = formatTime(elapsed);
+  }, 1000);
+
+  renderQuestions();
+  showScreen('screen-quiz');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDERIZAR TODAS AS QUESTÕES
+// ─────────────────────────────────────────────────────────────────────────────
+const LETTERS = ['A','B','C','D'];
+
+function renderQuestions() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+
+  QUESTIONS.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-card-${qi}`;
+
+    const num = document.createElement('div');
+    num.className = 'q-num';
+    num.textContent = `QUESTÃO ${qi + 1} DE ${QUESTIONS.length}`;
+    card.appendChild(num);
+
+    const text = document.createElement('div');
+    text.className = 'q-text';
+    text.textContent = q.q;
+    card.appendChild(text);
+
+    q.opts.forEach((opt, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.id = `opt-${qi}-${oi}`;
+      btn.innerHTML = `<span class="option-letter">${LETTERS[oi]}</span><span>${opt}</span>`;
+      btn.onclick = () => selectAnswer(qi, oi);
+      card.appendChild(btn);
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+    fb.id = `fb-${qi}`;
+    card.appendChild(fb);
+
+    container.appendChild(card);
+  });
+
+  // Botão de envio (aparece após última questão)
+  const submitBtn = document.createElement('button');
+  submitBtn.className = 'btn-primary';
+  submitBtn.id = 'btn-submit';
+  submitBtn.textContent = 'Ver meu resultado →';
+  submitBtn.style.cssText = 'display:none;margin-top:8px';
+  submitBtn.onclick = submitQuiz;
+  container.appendChild(submitBtn);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SELECIONAR RESPOSTA
+// ─────────────────────────────────────────────────────────────────────────────
+function selectAnswer(qi, oi) {
+  if (answered[qi]) return; // já respondeu — não faz nada
+  answered[qi] = true;
+  answers[qi] = oi;
+
+  const q = QUESTIONS[qi];
+  const isCorrect = oi === q.answer;
+
+  // Desabilita todas as opções desta questão
+  q.opts.forEach((_, i) => {
+    const btn = document.getElementById(`opt-${qi}-${i}`);
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add('correct');
+    else if (i === oi && !isCorrect) btn.classList.add('wrong');
+  });
+
+  // Mostra feedback
+  const fb = document.getElementById(`fb-${qi}`);
+  fb.className = `feedback ${isCorrect ? 'correct-fb' : 'wrong-fb'} show`;
+  fb.innerHTML = isCorrect
+    ? `✓ Correto! ${q.feedback}`
+    : `✗ Resposta incorreta. ${q.feedback}`;
+
+  // Atualiza progresso
+  const totalAnswered = answered.filter(Boolean).length;
+  document.getElementById('q-label').textContent = `Questão ${totalAnswered} de ${QUESTIONS.length}`;
+  document.getElementById('q-fill').style.width = `${(totalAnswered / QUESTIONS.length) * 100}%`;
+
+  // Scroll suave para a questão respondida
+  fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Mostra botão de envio quando tudo respondido
+  if (totalAnswered === QUESTIONS.length) {
+    document.getElementById('btn-submit').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('btn-submit').scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ENVIAR RESULTADO
+// ─────────────────────────────────────────────────────────────────────────────
+async function submitQuiz() {
+  clearInterval(timerInterval);
+  const totalSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const acertos = answers.filter((a, i) => a === QUESTIONS[i].answer).length;
+  const pct = Math.round((acertos / QUESTIONS.length) * 100);
+
+  // Monta tela de resultado
+  const scoreEl = document.getElementById('res-score');
+  scoreEl.textContent = `${pct}%`;
+  scoreEl.className = 'result-score ' + (pct >= 80 ? 'high' : pct >= 70 ? 'mid' : 'low');
+
+  const label = pct >= 80 ? '🏆 Aprovado com destaque' : pct >= 70 ? '✅ Aprovado' : '📚 Não aprovado — revise o material';
+  document.getElementById('res-label').textContent = label;
+  document.getElementById('res-name').textContent = userName;
+  document.getElementById('res-acertos').textContent = `${acertos} de ${QUESTIONS.length}`;
+  document.getElementById('res-tempo').textContent = formatTime(totalSeconds);
+
+  const msgs = {
+    high: 'Excelente! Você domina a nova precificação e o novo modelo do Suri Shop. Está pronto para apresentar com segurança.',
+    mid: 'Aprovado! Revise as questões que errou antes da próxima negociação — os detalhes fazem diferença na hora da objeção.',
+    low: 'Continue estudando o material de treinamento. Dê atenção especial às seções 3 (5 Movimentos) e 5 (Argumentos para objeções).'
+  };
+  document.getElementById('res-msg').textContent = pct >= 80 ? msgs.high : pct >= 70 ? msgs.mid : msgs.low;
+
+  showScreen('screen-result');
+
+  // Envia para Apps Script
+  const payload = {
+    action: 'submit',
+    name: userName,
+    email: userEmail,
+    score: pct,
+    acertos,
+    total: QUESTIONS.length,
+    tempo: formatTime(totalSeconds),
+    tempoSeg: totalSeconds,
+    respostas: answers.map((a, i) => ({
+      q: i + 1,
+      escolhida: a !== null ? LETTERS[a] : '—',
+      correta: LETTERS[QUESTIONS[i].answer],
+      acertou: a === QUESTIONS[i].answer
+    }))
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    document.getElementById('res-sending').textContent = '✓ Resultado enviado com sucesso.';
+  } catch(e) {
+    document.getElementById('res-sending').textContent = 'Não foi possível enviar automaticamente. Anote sua nota e informe ao Enablement.';
+  }
+}
+
+// Enter nos campos de inscrição
+document.getElementById('inp-email').addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+document.getElementById('inp-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('inp-email').focus(); });
+</script>
+</body>
+</html>

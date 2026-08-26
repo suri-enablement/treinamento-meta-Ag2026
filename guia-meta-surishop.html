@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Guia de Estudo · Nova Precificação Meta · Suri Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── DESIGN TOKENS (extraídos dos slides do Webinar F5) ── */
+:root{
+  --bg:       #080b1e;
+  --bg-card:  #0e1235;
+  --bg-card2: #111538;
+  --blue:     #4f56f0;
+  --blue-dim: #2a3080;
+  --lavender: #b6b8ff;
+  --green:    #00c48c;
+  --red:      #d94040;
+  --white:    #ffffff;
+  --slate:    #8a90b8;
+  --faint:    #5a6090;
+  --line:     rgba(255,255,255,0.07);
+}
+
+body{
+  font-family:'Sora',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── PÁGINA (tamanho A4 landscape para PDF) ── */
+.page{
+  width:297mm;
+  min-height:210mm;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  padding:40px 56px 36px;
+  page-break-after:always;
+  break-after:page;
+}
+
+/* gradiente radial canto sup. esq — exatamente como nos slides */
+.page-dark{
+  background:
+    radial-gradient(ellipse 65% 80% at 5% 0%, rgba(60,70,220,0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 100% 100%, rgba(30,20,80,0.4) 0%, transparent 55%),
+    var(--bg);
+}
+.page-green{
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 0%, #0d7a52 0%, #0a5c3e 40%, #083d29 100%);
+}
+.page-split{
+  background:
+    radial-gradient(ellipse 60% 90% at -5% 0%, rgba(50,60,210,0.5) 0%, transparent 55%),
+    var(--bg);
+}
+
+/* ── FOOTER ── */
+.footer{
+  position:absolute;
+  bottom:20px;left:56px;right:56px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:9px;font-weight:600;letter-spacing:1.2px;
+  color:var(--faint);text-transform:uppercase;
+  border-top:1px solid var(--line);
+  padding-top:10px;
+}
+
+/* ── EYEBROW ── */
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:9.5px;font-weight:700;letter-spacing:1.4px;
+  color:var(--blue);text-transform:uppercase;
+  margin-bottom:10px;
+}
+.eyebrow-dot{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--blue);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:800;color:#fff;flex-shrink:0;
+}
+
+/* ── TÍTULOS ── */
+.page-title{
+  font-size:36px;font-weight:800;line-height:1.1;
+  margin-bottom:6px;
+}
+.title-rule{
+  width:56px;height:3px;background:var(--blue);
+  border-radius:2px;margin-bottom:20px;
+}
+.section-num{
+  font-size:9px;font-weight:700;letter-spacing:1.2px;
+  color:var(--blue);text-transform:uppercase;
+}
+
+/* ── CARDS ── */
+.card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:14px;padding:22px 24px;
+}
+.card-blue-border{
+  border-color:var(--blue);
+  background:rgba(79,86,240,0.12);
+}
+.card-label{
+  font-size:8.5px;font-weight:700;letter-spacing:1.2px;
+  color:var(--blue);text-transform:uppercase;margin-bottom:6px;
+}
+.card-label-red{
+  font-size:8.5px;font-weight:700;letter-spacing:1.2px;
+  color:#e87070;text-transform:uppercase;margin-bottom:6px;
+}
+
+/* ── BODY TEXT ── */
+.body{font-size:13px;color:var(--slate);line-height:1.65;}
+.body b{color:#fff;font-weight:700;}
+
+/* ── GRIDS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+/* ── CHECK / X ITEMS ── */
+.check-item,.x-item{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:12px;color:var(--slate);line-height:1.5;
+  margin-bottom:8px;
+}
+.check-item b,.x-item b{color:#fff;}
+.check-badge{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:800;color:#fff;flex-shrink:0;margin-top:1px;
+}
+.x-badge{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--red);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:800;color:#fff;flex-shrink:0;margin-top:1px;
+}
+
+/* ── TABELA ── */
+.tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.tbl th{
+  background:#0a0e28;color:var(--slate);
+  font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:10px 12px;text-align:left;
+}
+.tbl td{
+  padding:10px 12px;border-bottom:1px solid var(--line);
+  color:#d0d3ef;vertical-align:middle;
+}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl .val-blue{color:var(--blue);font-weight:700;}
+.tbl .val-green{color:var(--green);font-weight:700;}
+.tbl .strikethrough{text-decoration:line-through;color:var(--faint);}
+
+/* ── CALLOUT ── */
+.callout{
+  border-left:3px solid var(--blue);
+  background:rgba(79,86,240,0.1);
+  border-radius:0 10px 10px 0;
+  padding:14px 16px;
+  margin:12px 0;
+}
+.callout-green{border-color:var(--green);background:rgba(0,196,140,0.08);}
+.callout-label{
+  font-size:8px;font-weight:700;letter-spacing:1px;
+  color:var(--blue);text-transform:uppercase;margin-bottom:5px;
+}
+.callout-green .callout-label{color:var(--green);}
+.callout p{font-size:11.5px;color:var(--slate);line-height:1.6;}
+.callout p b{color:#fff;}
+
+/* ── RESUMO PARA A PROVA ── */
+.resumo-box{
+  border-top:1px solid var(--line);
+  margin-top:16px;padding-top:14px;
+}
+.resumo-label{
+  font-size:8px;font-weight:700;letter-spacing:1.2px;
+  color:var(--blue);text-transform:uppercase;margin-bottom:10px;
+}
+/* ── MOVIMENTO CARD ── */
+.mov-card{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;padding:16px 18px;
+}
+.mov-num{
+  font-size:8px;font-weight:700;letter-spacing:1.2px;
+  color:var(--blue);text-transform:uppercase;margin-bottom:4px;
+}
+.mov-title{font-size:13px;font-weight:800;margin-bottom:6px;}
+.mov-desc{font-size:11px;color:var(--slate);line-height:1.55;margin-bottom:8px;}
+.mov-gains{display:flex;flex-direction:column;gap:4px;}
+.mov-gain{
+  display:flex;gap:7px;font-size:10px;color:var(--slate);line-height:1.4;
+}
+.mov-gain-dot{
+  width:14px;height:14px;border-radius:50%;background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:7px;color:#fff;flex-shrink:0;margin-top:1px;
+}
+
+/* ── OBJEÇÃO ── */
+.obj-card{
+  border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px;margin-bottom:10px;
+}
+.obj-label{
+  font-size:7.5px;font-weight:700;letter-spacing:1px;
+  color:#e87070;text-transform:uppercase;margin-bottom:4px;
+}
+.resp-label{
+  font-size:7.5px;font-weight:700;letter-spacing:1px;
+  color:var(--green);text-transform:uppercase;margin:8px 0 4px;
+}
+.obj-q{font-size:12px;font-weight:700;margin-bottom:0;color:#fff;}
+.obj-r{font-size:11px;color:var(--slate);line-height:1.55;}
+.obj-r b{color:#fff;}
+
+/* ── PRINT ── */
+@media print{
+  body{background:#080b1e !important;}
+  .page{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     PÁGINA 1 — CAPA
+════════════════════════════════════════════════════════════ -->
+<div class="page page-dark" style="justify-content:center;">
+
+  <div style="margin-bottom:10px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1.6px;color:rgba(182,184,255,0.5);text-transform:uppercase;margin-bottom:48px">
+      SURI SHOP &nbsp;·&nbsp; RD STATION &nbsp;·&nbsp; TOTVS
+    </div>
+
+    <div style="font-size:46px;font-weight:900;line-height:1.06;margin-bottom:22px;max-width:520px">
+      O WhatsApp mudou.<br/>
+      Entenda a resposta<br/>
+      do <span style="color:var(--lavender)">Suri Shop.</span>
+    </div>
+
+    <div style="width:64px;height:3px;background:var(--blue);border-radius:2px;margin-bottom:20px;"></div>
+
+    <div class="body" style="max-width:480px;font-size:14px;">
+      Guia de Estudo — Nova Precificação da Meta e os 5 Movimentos do novo plano.
+    </div>
+    <div class="body" style="font-size:11px;margin-top:4px;color:var(--faint)">
+      Agosto · 2026 &nbsp;·&nbsp; Uso interno &nbsp;·&nbsp; Baseado no Webinar F5
+    </div>
+  </div>
+
+  <!-- Citação -->
+  <div style="margin-top:32px;max-width:580px;">
+    <div class="callout">
+      <p style="font-size:13px;font-style:italic;color:#d0d3ef">
+        "O WhatsApp ficou mais caro. Conversar melhor ficou mais valioso."
+      </p>
+    </div>
+  </div>
+
+  <!-- Sumário -->
+  <div style="margin-top:28px;">
+    <div style="font-size:8.5px;font-weight:700;letter-spacing:1.3px;color:var(--blue);text-transform:uppercase;margin-bottom:12px">Neste guia</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;border-top:1px solid var(--line);padding-top:8px;">
+        <span style="font-weight:800;color:var(--blue);width:20px">01</span>
+        <span style="color:var(--slate)">A mudança da Meta — o que realmente mudou</span>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;border-top:1px solid var(--line);padding-top:8px;">
+        <span style="font-weight:800;color:var(--blue);width:20px">02</span>
+        <span style="color:var(--slate)">O problema do modelo antigo</span>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;border-top:1px solid var(--line);padding-top:8px;">
+        <span style="font-weight:800;color:var(--blue);width:20px">03</span>
+        <span style="color:var(--slate)">Os 5 Movimentos do novo plano Suri Shop</span>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;border-top:1px solid var(--line);padding-top:8px;">
+        <span style="font-weight:800;color:var(--blue);width:20px">04</span>
+        <span style="color:var(--slate)">O Gerador de Propostas na prática</span>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;border-top:1px solid var(--line);padding-top:8px;">
+        <span style="font-weight:800;color:var(--blue);width:20px">05</span>
+        <span style="color:var(--slate)">Argumentos prontos — objeções e respostas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Webinar F5 · Time AR &amp; Inbound</span>
+    <span>Agosto 2026</span>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PÁGINA 2 — BLOCO 1: A MUDANÇA DA META
+════════════════════════════════════════════════════════════ -->
+<div class="page page-dark">
+
+  <div class="eyebrow">
+    <div class="eyebrow-dot">1</div>
+    <span>Seção 01 &nbsp;·&nbsp; A Mudança da Meta</span>
+  </div>
+  <div class="page-title">O que muda?</div>
+  <div class="title-rule"></div>
+
+  <!-- Card principal — mensagem de serviço -->
+  <div class="card" style="margin-bottom:14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;">
+      <div style="flex:1">
+        <div class="card-label" style="color:#e87070;">↑ Passa a ser cobrado</div>
+        <div style="font-size:15px;font-weight:800;line-height:1.3;max-width:340px;margin-bottom:10px;">
+          Mensagens de Serviço passam a ser cobradas por mensagem enviada.
+        </div>
+        <div style="font-size:13px;font-weight:700;color:#e0b0b0;margin-top:4px;">+ Templates de Utilidade na janela de 24h também passam a ser cobrados.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:18px;flex-shrink:0">
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:var(--faint);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.8px">Era</div>
+          <div style="font-size:18px;font-weight:700;color:var(--faint);text-decoration:line-through;">Gratuita</div>
+        </div>
+        <div style="font-size:20px;color:var(--slate)">→</div>
+        <div class="card card-blue-border" style="padding:14px 20px;text-align:center;">
+          <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;color:var(--lavender);margin-bottom:4px;text-transform:uppercase">Passa a custar</div>
+          <div style="font-size:28px;font-weight:900;color:#fff;line-height:1">R$ 0,04</div>
+          <div style="font-size:8px;color:var(--slate);letter-spacing:0.8px;margin-top:3px;text-transform:uppercase">Por mensagem enviada</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Datas -->
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:14px">📅</span>
+        <span style="font-size:9px;font-weight:700;letter-spacing:1px;color:#e87070;text-transform:uppercase">1º de Setembro</span>
+      </div>
+      <div class="body" style="font-size:12px;">A Meta publica o <b>preço oficial</b> por país. A sinalização é que será o mesmo da Utilidade: <b>R$ 0,04</b>.</div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:14px">📅</span>
+        <span style="font-size:9px;font-weight:700;letter-spacing:1px;color:#e87070;text-transform:uppercase">1º de Outubro</span>
+      </div>
+      <div class="body" style="font-size:12px;">A <b>cobrança começa a valer</b> — para todas as plataformas oficiais do mercado, ao mesmo tempo.</div>
+    </div>
+  </div>
+
+  <!-- Tabela preços -->
+  <table class="tbl" style="margin-bottom:14px;">
+    <thead>
+      <tr>
+        <th>Mensagem</th><th>Custo equiv. no plano antigo Suri</th><th>Novo modelo</th><th>Redução</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Marketing</td><td class="strikethrough">R$ 0,49 – 0,66</td><td class="val-blue">R$ 0,36</td><td class="val-green">27% a 45%</td></tr>
+      <tr><td>Utilidade</td><td class="strikethrough">R$ 0,25 – 0,66</td><td class="val-blue">R$ 0,04</td><td class="val-green">84% a 94%</td></tr>
+      <tr><td>Autenticação</td><td style="color:var(--slate)">No plano</td><td class="val-blue">R$ 0,04</td><td style="color:var(--faint)">—</td></tr>
+      <tr><td><b>Serviço</b> <span style="background:rgba(217,64,64,0.2);color:#e87070;font-size:7.5px;padding:2px 7px;border-radius:100px;font-weight:700;vertical-align:middle;">NOVO</span></td><td style="color:var(--green)">Gratuita (janela 24h)</td><td class="val-blue">R$ 0,04*</td><td style="color:var(--slate)">Repasse integral</td></tr>
+      <tr><td><b>Utilidade na janela 24h</b> <span style="background:rgba(217,64,64,0.2);color:#e87070;font-size:7.5px;padding:2px 7px;border-radius:100px;font-weight:700;vertical-align:middle;">NOVO</span></td><td style="color:var(--green)">Gratuita (quando na 24h)</td><td class="val-blue">R$ 0,04*</td><td style="color:var(--slate)">Repasse integral</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Impacto + resumo -->
+  <div class="callout" style="margin-bottom:8px;">
+    <div class="callout-label">Na prática · Impacto real</div>
+    <p>40 mensagens de Serviço × R$ 0,04 = <b>R$ 1,60 por conversa</b> (hoje: zero).<br/>
+    5.000 interações × 40 msgs × R$ 0,04 = <b>R$ 8.000/mês em custo novo</b>. A fatura pode triplicar sem mudar nada.</p>
+  </div>
+  <div style="background:rgba(217,180,64,0.1);border:1px solid rgba(217,180,64,0.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;">
+    <p style="font-size:10.5px;color:#c8a840;line-height:1.6;"><b>⚠ Sujeito a alteração.</b> Valores rastreados junto à Meta até 19/08/2026 (base: R$0,3217 Marketing / R$0,035 Utilidade). A Meta publica oficialmente as taxas vigentes a partir de 1º de outubro apenas em 1º de setembro de 2026. O valor de R$ 0,04 usado neste guia é a <b>sinalização do Webinar F5</b> — confirme os valores oficiais após 1/09/2026.</p>
+  </div>
+
+  <div class="resumo-box">
+    <div class="resumo-label">Resumo para a prova</div>
+    <div class="grid-2" style="gap:6px;">
+      <div class="check-item"><div class="check-badge">✓</div><span>Serviço → <b>R$ 0,04/msg</b> a partir de 1/10/2026</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Preço oficial publicado pela Meta em <b>1/09/2026</b></span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Mudança vale para <b>todas</b> as plataformas ao mesmo tempo</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Webchat e janela 72h (Click to WhatsApp) = <b>sem custo Meta</b></span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Marketing atual (Meta API): <b>R$ 0,31 a R$ 0,35</b> — novo modelo Suri repassa <b>R$ 0,36</b></span></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>01 · A Mudança da Meta</span><span>02</span></div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PÁGINA 3 — BLOCO 2: O PROBLEMA DO MODELO ANTIGO
+════════════════════════════════════════════════════════════ -->
+<div class="page page-dark">
+
+  <div class="eyebrow">
+    <div class="eyebrow-dot">2</div>
+    <span>Seção 02 &nbsp;·&nbsp; O Problema do Modelo Antigo</span>
+  </div>
+  <div class="page-title">O modelo atual<br/>agravaria o problema.</div>
+  <div class="title-rule"></div>
+
+  <div class="body" style="font-size:13px;margin-bottom:18px;max-width:580px;">
+    Hoje o cliente contrata tudo incluso: atendidos + mensagens ativas. Quem manda pouco paga pelo que outro manda muito.
+    A mensageria embutida infla o valor — gerando objeção na venda, downgrade e churn.
+  </div>
+
+  <!-- Dois números de impacto -->
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card" style="text-align:center;padding:20px;">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;color:var(--blue);text-transform:uppercase;margin-bottom:8px;">Marketing no plano hoje</div>
+      <div style="font-size:40px;font-weight:900;color:var(--lavender);line-height:1;margin-bottom:6px;">R$0,66</div>
+      <div style="font-size:10.5px;color:var(--slate);">Custo equivalente para alguns clientes.<br/>A Meta cobra <b style="color:#fff">R$ 0,36</b> — <b style="color:#fff">83% a mais</b>.</div>
+    </div>
+    <div class="card" style="text-align:center;padding:20px;">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;color:var(--blue);text-transform:uppercase;margin-bottom:8px;">Utilidade no plano hoje</div>
+      <div style="font-size:40px;font-weight:900;color:var(--lavender);line-height:1;margin-bottom:6px;">16×</div>
+      <div style="font-size:10.5px;color:var(--slate);">Alguns pagam R$ 0,66 por mensagem.<br/>A Meta cobra <b style="color:#fff">R$ 0,04</b>.</div>
+    </div>
+  </div>
+
+  <!-- O que era ruim -->
+  <div class="grid-2" style="margin-bottom:14px;gap:12px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#fff;margin-bottom:10px;">O que era ruim para o cliente</div>
+      <div class="x-item"><div class="x-badge">✕</div><span>Pagava até 83% a mais no Marketing e 16× na Utilidade, sem enxergar.</span></div>
+      <div class="x-item"><div class="x-badge">✕</div><span>Mensageria obrigatória inflava o plano e reduzia a transparência.</span></div>
+      <div class="x-item"><div class="x-badge">✕</div><span>Custo novo da Meta chegaria por cima de uma média que já cobrava caro.</span></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#fff;margin-bottom:10px;">O que era ruim para o comercial</div>
+      <div class="x-item"><div class="x-badge">✕</div><span>Ticket inflado gerava objeção na entrada — proposta indefensável na comparação.</span></div>
+      <div class="x-item"><div class="x-badge">✕</div><span>Downgrade e churn de quem descobria a diferença de preço.</span></div>
+      <div class="x-item"><div class="x-badge">✕</div><span>Venda travada pela volumetria: mensageria obrigatória afastava clientes menores.</span></div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-bottom:14px;">
+    <div class="callout-label">Por que tudo mudou</div>
+    <p>Custo novo da Meta + modelo de média = mais churn e mais objeção.<br/>
+    Por isso a resposta não é um ajuste — <b>é um modelo inteiramente novo</b>.</p>
+  </div>
+
+  <div class="resumo-box">
+    <div class="resumo-label">Resumo para a prova</div>
+    <div class="grid-2" style="gap:6px;">
+      <div class="check-item"><div class="check-badge">✓</div><span>Modelo antigo: mensageria embutida → cliente não via o custo real</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Alguns pagavam até <b>16× mais</b> em Utilidade vs. tarifa Meta real</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Mudança da Meta tornaria o problema ainda maior</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Por isso a resposta é um <b>modelo novo</b>, não um ajuste</span></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>02 · O Problema do Modelo Antigo</span><span>03</span></div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PÁGINA 4 — BLOCO 3: OS 5 MOVIMENTOS
+════════════════════════════════════════════════════════════ -->
+<div class="page page-dark">
+
+  <div class="eyebrow">
+    <div class="eyebrow-dot">3</div>
+    <span>Seção 03 &nbsp;·&nbsp; A Nossa Resposta</span>
+  </div>
+  <div class="page-title">Os 5 Movimentos.</div>
+  <div class="title-rule"></div>
+
+  <div class="callout" style="margin-bottom:16px;">
+    <div class="callout-label">A frase de uma linha</div>
+    <p style="font-size:12.5px;">"A Meta criou um custo por mensagem. Nós entregamos a plataforma que mais reduz mensagem no mercado — com teto de gasto, consumo em tempo real, mensagem ao preço da Meta e um plano simples de entender."</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;flex:1;">
+
+    <div class="mov-card">
+      <div class="mov-num">Movimento 01</div>
+      <div class="mov-title">Plano único e simples</div>
+      <div class="mov-desc">O cliente escolhe só quantos clientes atende/mês. Mensagens da Meta saem do plano e são cobradas pelo consumo real.</div>
+      <div class="mov-gains">
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Cliente:</b> plano mais barato, decisão mais simples.</span></div>
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Comercial:</b> menos objeção de entrada, menos churn.</span></div>
+      </div>
+    </div>
+
+    <div class="mov-card">
+      <div class="mov-num">Movimento 02</div>
+      <div class="mov-title">Preço da Meta — margem zero</div>
+      <div class="mov-desc">Marketing R$ 0,36, Utilidade R$ 0,04. Preço de tabela da Meta, sem margem da Suri. Fatura no mês seguinte.</div>
+      <div class="mov-gains">
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Cliente:</b> até 94% mais barato. Fatura conferível na fonte.</span></div>
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Comercial:</b> "você paga o preço da Meta, sem margem."</span></div>
+      </div>
+    </div>
+
+    <div class="mov-card">
+      <div class="mov-num">Movimento 03</div>
+      <div class="mov-title">Cliente no controle — teto de gasto</div>
+      <div class="mov-desc">O cliente define até quanto quer investir em msgs Meta/mês. Ao atingir 100% do teto, os envios pausam automaticamente.</div>
+      <div class="mov-gains">
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Cliente:</b> zero surpresa na fatura, previsibilidade.</span></div>
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Comercial:</b> diferencial exclusivo — nenhum concorrente tem.</span></div>
+      </div>
+    </div>
+
+    <div class="mov-card">
+      <div class="mov-num">Movimento 04</div>
+      <div class="mov-title">Agentes de IA — inclusos</div>
+      <div class="mov-desc">Service Agent e Commerce Agent inclusos para todos. Commerce Agent faz a mesma venda com 3× menos mensagens: R$ 1,60 → R$ 0,53.</div>
+      <div class="mov-gains">
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Cliente:</b> IA 24/7, custo de conversa cai 67%.</span></div>
+        <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Comercial:</b> "IA inclusa" sem mexer no preço.</span></div>
+      </div>
+    </div>
+
+    <div class="mov-card" style="grid-column:span 2;">
+      <div class="mov-num">Movimento 05</div>
+      <div class="mov-title">Canais Integrados — Webchat gratuito</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="mov-desc">Conversa começa no WhatsApp, migra ao Webchat nas etapas que consomem mais mensagens, e volta — com histórico e contexto preservados. Msgs no Webchat: custo Meta zero.</div>
+        <div class="mov-gains">
+          <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Cliente:</b> segundo canal a custo zero, sem recomeço de conversa.</span></div>
+          <div class="mov-gain"><div class="mov-gain-dot">✓</div><span><b style="color:#fff">Comercial:</b> resposta à objeção "e se o WhatsApp ficar caro?". Retenção dentro de casa.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="resumo-box" style="margin-top:12px;">
+    <div class="resumo-label">Resumo para a prova</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+      <div class="check-item"><div class="check-badge">✓</div><span>Mv1: plano por atendidos, msgs fora do valor fixo</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Mv2: margem zero — cliente paga preço da Meta</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Mv3: teto de gasto — diferencial exclusivo</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Mv4: IA inclusa, 3× menos msgs, –67% custo</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Mv5: Webchat integrado, sem custo Meta</span></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>03 · Os 5 Movimentos</span><span>04</span></div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PÁGINA 5 — BLOCO 4: GERADOR DE PROPOSTAS
+════════════════════════════════════════════════════════════ -->
+<div class="page page-dark">
+
+  <div class="eyebrow">
+    <div class="eyebrow-dot">4</div>
+    <span>Seção 04 &nbsp;·&nbsp; O Gerador de Propostas</span>
+  </div>
+  <div class="page-title">O disparo do cliente<br/>vira MRR.</div>
+  <div class="title-rule"></div>
+
+  <div class="body" style="font-size:13px;margin-bottom:16px;max-width:600px;">
+    A lógica central: <b>disparo que recebe resposta = cliente atendido = volumetria = MRR</b>.
+    A pergunta certa na negociação não é "quantos disparos?" — é "quantos vão responder?"
+  </div>
+
+  <!-- 3 Passos -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div class="card">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">Passo 1</div>
+      <div style="font-size:11.5px;font-weight:800;margin-bottom:6px;">Volumetria base</div>
+      <div class="body" style="font-size:11px;">Cliente informa quantos atende/mês. Sistema retorna valor do plano e desconto por volume.</div>
+    </div>
+    <div class="card">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">Passo 2</div>
+      <div style="font-size:11.5px;font-weight:800;margin-bottom:6px;">Canais ativos</div>
+      <div class="body" style="font-size:11px;">Disparos/mês × % resposta → <b>atendidos a mais</b>. Custo = disparos × tarifa (R$ 0,36 Mkt / R$ 0,04 Utilidade).</div>
+    </div>
+    <div class="card">
+      <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">Passo 3</div>
+      <div style="font-size:11.5px;font-weight:800;margin-bottom:6px;">Teto de mensagens</div>
+      <div class="body" style="font-size:11px;">Cliente define o teto mensal de msgs Meta. <b>Fatura máx = plano + teto</b>.</div>
+    </div>
+  </div>
+
+  <!-- Exemplo -->
+  <div class="callout callout-green" style="margin-bottom:14px;">
+    <div class="callout-label">Exemplo numérico do webinar</div>
+    <p>Base: <b>5.000 atendidos → R$ 4.350/mês</b><br/>
+    + Venda: 6.000 disparos × 25% = +1.500 atendidos, custo R$ 2.160<br/>
+    + Atendimento: 8.000 disparos × % resposta, custo R$ 320<br/>
+    → MRR real: <b>R$ 5.590 com 6.500 atendidos (+R$ 1.240 vs. base)</b></p>
+  </div>
+
+  <!-- Tabela comparativa -->
+  <div style="margin-bottom:14px;">
+    <div style="font-size:10px;font-weight:700;color:#fff;margin-bottom:10px;">O mesmo deal — dois desfechos</div>
+    <table class="tbl">
+      <thead>
+        <tr><th></th><th>Como se vendia antes</th><th>Dimensionado pelo Gerador</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Plano (MRR)</b></td><td style="color:var(--slate)">R$ 6.700 (misto c/ msgs)</td><td class="val-green">R$ 8.610 (plano puro)</td></tr>
+        <tr><td><b>Mensagens do cliente</b></td><td style="color:var(--slate)">R$ 3.450 embutido</td><td class="val-green">R$ 2.200 (−36%)</td></tr>
+        <tr><td><b>MRR final</b></td><td style="color:var(--slate)">R$ 6.700</td><td class="val-green" style="font-size:13px;font-weight:900;">R$ 8.610 (+29%)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="resumo-box">
+    <div class="resumo-label">Resumo para a prova</div>
+    <div class="grid-2" style="gap:6px;">
+      <div class="check-item"><div class="check-badge">✓</div><span>Resposta a disparo = cliente atendido = entra na volumetria</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Atendidos a mais = disparos × % resposta</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Custo msgs = disparos × tarifa (Mkt R$ 0,36 / Util R$ 0,04)</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Mesmo deal bem dimensionado → <b>+29% de MRR</b></span></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>04 · Gerador de Propostas</span><span>05</span></div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PÁGINA 6 — BLOCO 5: OBJEÇÕES E ARGUMENTOS
+════════════════════════════════════════════════════════════ -->
+<div class="page page-dark">
+
+  <div class="eyebrow">
+    <div class="eyebrow-dot">5</div>
+    <span>Seção 05 &nbsp;·&nbsp; Argumentos Prontos</span>
+  </div>
+  <div class="page-title">Três objeções.<br/>Nenhuma se sustenta.</div>
+  <div class="title-rule"></div>
+
+  <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
+
+    <div class="obj-card">
+      <div class="obj-label">Objeção 01</div>
+      <div class="obj-q">"Ninguém vai querer comprar agora que o WhatsApp ficou caro."</div>
+      <div class="resp-label">Resposta</div>
+      <div class="obj-r">A mudança vale para <b>todas as plataformas ao mesmo tempo</b> — nenhum concorrente escapa. Enquanto o mercado explica o problema, você já apresenta a solução.</div>
+    </div>
+
+    <div class="obj-card">
+      <div class="obj-label">Objeção 02</div>
+      <div class="obj-q">"Vou perder o controle da minha conta."</div>
+      <div class="resp-label">Resposta</div>
+      <div class="obj-r"><b>Nenhum concorrente tem teto de gasto dentro do produto</b> — só calculadoras externas. Na Suri, o cliente define o teto, acompanha em tempo real e os envios pausam automaticamente. A objeção morre na demonstração.</div>
+    </div>
+
+    <div class="obj-card">
+      <div class="obj-label">Objeção 03</div>
+      <div class="obj-q">"As empresas vão para plataformas não oficiais."</div>
+      <div class="resp-label">Resposta</div>
+      <div class="obj-r">A Meta está <b>bloqueando os números fora da API oficial</b>. Na prática, empresas bloqueadas migram para a solução oficial, não o contrário.</div>
+    </div>
+
+    <div class="obj-card">
+      <div class="obj-label">Objeção 04</div>
+      <div class="obj-q">"A IA vai ficar cara com a cobrança por mensagem de Serviço."</div>
+      <div class="resp-label">Resposta</div>
+      <div class="obj-r">É o contrário. O Commerce Agent faz a mesma venda com <b>3× menos mensagens</b> — R$ 1,60 vira R$ 0,53 por conversa. A IA reduz <b>67% do custo de mensageria</b>. E está inclusa no plano.</div>
+    </div>
+
+  </div>
+
+  <div class="callout" style="margin-top:12px;margin-bottom:12px;">
+    <div class="callout-label">O argumento de uma frase</div>
+    <p style="font-size:12px;font-weight:600;color:#d0d3ef;">"Plano simples por atendidos, mensagem ao preço da Meta, IA inclusa e teto de gasto — diferenciais que nenhum concorrente tem."</p>
+  </div>
+
+  <div class="resumo-box">
+    <div class="resumo-label">Resumo para a prova</div>
+    <div class="grid-2" style="gap:6px;">
+      <div class="check-item"><div class="check-badge">✓</div><span>Mudança vale para <b>todo o mercado</b> — não é desvantagem do Suri</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Teto de gasto = diferencial exclusivo, nenhum concorrente tem</span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>Plataformas não oficiais sendo <b>bloqueadas pela Meta</b></span></div>
+      <div class="check-item"><div class="check-badge">✓</div><span>IA reduz 67% do custo — aliada, não vilã, na nova precificação</span></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>05 · Argumentos Prontos</span><span>06</span></div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PÁGINA 7 — CONTRACAPA
+════════════════════════════════════════════════════════════ -->
+<div class="page page-green" style="justify-content:center;">
+
+  <div style="max-width:520px;">
+    <div style="font-size:9px;font-weight:700;letter-spacing:1.6px;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:28px;">
+      SURI SHOP &nbsp;·&nbsp; RD STATION &nbsp;·&nbsp; TOTVS
+    </div>
+    <div style="font-size:30px;font-weight:900;line-height:1.15;color:rgba(200,255,220,0.9);margin-bottom:16px;">
+      A Meta criou um novo custo.
+    </div>
+    <div style="font-size:36px;font-weight:900;line-height:1.1;color:#fff;margin-bottom:32px;">
+      Temos o produto certo,<br/>
+      as ações certas e o melhor<br/>
+      time comercial do Brasil.
+    </div>
+
+    <div class="grid-3" style="gap:12px;margin-bottom:28px;">
+      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:16px;">
+        <div style="font-size:8px;font-weight:700;letter-spacing:1px;color:rgba(200,255,220,0.7);text-transform:uppercase;margin-bottom:8px;">Vender mais</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.5;">Resposta pronta enquanto o mercado explica o problema — menos objeção, plano mais simples de fechar.</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:16px;">
+        <div style="font-size:8px;font-weight:700;letter-spacing:1px;color:rgba(200,255,220,0.7);text-transform:uppercase;margin-bottom:8px;">Mais competitivo</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.5;">Mensagem ao preço da Meta, teto de gasto e IA inclusos — diferenciais que nenhum concorrente tem.</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:16px;">
+        <div style="font-size:8px;font-weight:700;letter-spacing:1px;color:rgba(200,255,220,0.7);text-transform:uppercase;margin-bottom:8px;">Maior MRR</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.5;">Cada resposta a disparo vira cliente atendido — e o Gerador de Propostas coloca esse dinheiro na negociação.</div>
+      </div>
+    </div>
+
+    <div style="font-size:14px;color:rgba(255,255,255,0.6);">
+      Conto com vocês — e contem comigo e com todo o time.
+    </div>
+  </div>
+
+  <div class="footer" style="border-top-color:rgba(255,255,255,0.15);">
+    <span style="color:rgba(255,255,255,0.3)">Webinar F5 · Time AR &amp; Inbound</span>
+    <span style="color:rgba(255,255,255,0.3)">Agosto 2026</span>
+  </div>
+</div>
+
+</body>
+</html>
